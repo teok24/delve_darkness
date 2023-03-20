@@ -1,6 +1,7 @@
 package net.teok.delvedarkness;
 
 import net.fabricmc.api.ModInitializer;
+import net.teok.delvedarkness.networking.ModMessages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ public class DelveDarkness implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-
+		ModMessages.registerC2SPackets();
+		
 	}
 }
