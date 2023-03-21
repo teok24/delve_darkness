@@ -3,6 +3,7 @@ package net.teok.delvedarkness.event;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.LightType;
@@ -12,7 +13,9 @@ import net.teok.delvedarkness.networking.ModMessages;
 
 public class LightChangeHandler {
     public static int monsterSpawnBlockLightLimit;
-    public static int darknessTick;
+    public static int darkTick = 19; //should be 1 tick less than config doDamageInSeconds
+    public static int timeUntilDamage = 100; //5 seconds default time until damage starts ticking
+    public static int tick = 0;
 
     public static void registerLightChange()
     {
@@ -20,17 +23,23 @@ public class LightChangeHandler {
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
             if (client.player != null) {
                 //
-                if (darknessTick % 20 == 0)
-                {
-                    if (client.player.isCreative() || client.player.isSpectator()) return;
-                    if (isDark(client.world, client.player.getBlockPos())) {
-                        ClientPlayNetworking.send(ModMessages.DARKNESS_ID, PacketByteBufs.create());
-                    } else {
-                        ClientPlayNetworking.send(ModMessages.LIGHTNESS_ID, PacketByteBufs.create());
+                PacketByteBuf packet = PacketByteBufs.create();
+                packet.writeInt(darkTick);
+                if (client.player.isCreative() || client.player.isSpectator()) return;
+                if (isDark(client.world, client.player.getBlockPos())) {
+                    tick++;
+                    if (tick >= timeUntilDamage)
+                    {
+                        darkTick ++;
                     }
+                    ClientPlayNetworking.send(ModMessages.DARKNESS_ID, packet);
+                } else {
+                    tick = 0;
+                    darkTick = 19;
+                    ClientPlayNetworking.send(ModMessages.LIGHTNESS_ID, packet);
                 }
 
-                darknessTick++;
+
             }
         });
     }
@@ -38,7 +47,7 @@ public class LightChangeHandler {
     {
         int light = isDay(world, pos);
         light += world.getLightLevel(LightType.BLOCK, pos);
-        if (light <= 4)
+        if (light <= 1)
         {
             return true;
         }
