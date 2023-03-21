@@ -1,4 +1,7 @@
 {
   "key.category.delvedarkness.delvedarkness": "Delve Darkness",
-  "key.delvedarkness.get_light": "Get Light Key"
+  "key.delvedarkness.get_light": "Get Light Key",
+
+  "death.attack.delvedarkness_darkness": "%1$s was swallowed by darkness",
+  "death.attack.delvedarkness_darkness.player": "%1$s was swallowed by darkness with the help of %2$s"
 }
