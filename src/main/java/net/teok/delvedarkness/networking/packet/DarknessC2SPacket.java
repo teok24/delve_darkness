@@ -16,7 +16,8 @@ public class DarknessC2SPacket {
         if (player.isDead())
         {
             DarknessData.resetDarkness(((IEntityDataSaver) player));
-            return;
+            DarknessData.addDarknessImmunity(((IEntityDataSaver) player),1000);
+            return; //reset player
         }
         var darknessTick = buf.readInt();
         if (darknessTick % 20 != 0) return; // %20 is 1 second, should be controlled by config
