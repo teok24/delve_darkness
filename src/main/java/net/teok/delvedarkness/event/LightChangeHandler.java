@@ -9,6 +9,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.teok.delvedarkness.networking.ModMessages;
+import net.teok.delvedarkness.util.DarknessData;
+import net.teok.delvedarkness.util.IEntityDataSaver;
 
 
 public class LightChangeHandler {
@@ -26,17 +28,20 @@ public class LightChangeHandler {
                 packet.writeInt(darkTick);
                 if (client.player.isCreative() || client.player.isSpectator() || client.isPaused()) return;
                 if (isDark(client.world, client.player.getBlockPos())) {
-                    tick++;
-                    if (tick >= timeUntilDamage)
+                    DarknessData.removeDarknessImmunity(((IEntityDataSaver) client.player), 1); //darkness immunity tick
+                    //spawn particles
+                    //client.world.addParticle(ParticleTypes.ASH, client.player.getX(),client.player.getY(),client.player.getZ(),0,0,0);
+                    if (((IEntityDataSaver) client.player).getPersistentData().getInt("darknessImmunity") <= 0)
                     {
                         darkTick ++;
                     }
                     ClientPlayNetworking.send(ModMessages.DARKNESS_ID, packet);
                 } else {
-                    tick = 0;
+                    DarknessData.addDarknessImmunity(((IEntityDataSaver) client.player), 5); //number should be configurable for speed
                     darkTick = 19;
                     ClientPlayNetworking.send(ModMessages.LIGHTNESS_ID, packet);
                 }
+                //client.player.sendMessage(Text.of("Immunity: " + ((IEntityDataSaver)client.player).getPersistentData().getInt("darknessImmunity")),true);
             }
         });
     }
