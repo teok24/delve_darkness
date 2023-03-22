@@ -3,18 +3,18 @@
   "id": "delvedarkness",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Darkness Take Me",
+  "description": "Darkness takes its toll. You now take damage after staying in darkness for too long.",
   "authors": [
-    "Teok"
+    "Teok",
+    "cyancees"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "sources": "https://github.com/teok24/delve_darkness"
   },
 
   "license": "MIT License",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/delvedarkness/eyecon.png",
 
   "environment": "*",
   "entrypoints": {
