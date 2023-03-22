@@ -8,12 +8,13 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.teok.delvedarkness.DelveDarkness;
-import net.teok.delvedarkness.event.LightChangeHandler;
 import net.teok.delvedarkness.util.IEntityDataSaver;
 
 public class DarknessHudOverlay implements HudRenderCallback {
+    private static int delveDarkness_eyeTick;
     private static final Identifier EYE_CLOSED = new Identifier(DelveDarkness.MOD_ID, "textures/darkness/eye_closed.png");
-    private static final Identifier[] EYE_QUARTER_OPENED = {
+    //I have no idea if minecraft has a way of animating HUD elements normally, so I've coded my own below. If someone does know a proper way, please let me know on the fabric discord.
+    private static final Identifier[] EYE_QUARTER_OPENED = { //Identifier arrays hold every frame of animation, these are used in getAnimatedTextureSlice() below.
             new Identifier(DelveDarkness.MOD_ID, "textures/darkness/eye_quarter_open/1.png"),
             new Identifier(DelveDarkness.MOD_ID, "textures/darkness/eye_quarter_open/2.png"),
             new Identifier(DelveDarkness.MOD_ID, "textures/darkness/eye_quarter_open/3.png"),
@@ -90,9 +91,10 @@ public class DarknessHudOverlay implements HudRenderCallback {
 
     };
     @Override
-    public void onHudRender(MatrixStack matrixStack, float tickDelta) {
+    public void onHudRender(MatrixStack matrixStack, float tickDelta) { //Whenever hud is rendered, this will update.
+        delveDarkness_eyeTick++; //simply the tick for the animation speed.
         int x = 0, y = 0;
-        MinecraftClient client = MinecraftClient.getInstance();
+        MinecraftClient client = MinecraftClient.getInstance(); //get client instance
         if (client != null)
         {
             int width = client.getWindow().getScaledWidth(), height = client.getWindow().getScaledHeight(); //make ints for width and height
@@ -101,39 +103,33 @@ public class DarknessHudOverlay implements HudRenderCallback {
         }
         if (client.player == null || client.player.isCreative() || client.player.isSpectator())
         {
-            return;
+            return; //if player doesn't exist or is in a mode with invulnerability, leave
         }
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1,1,1,1);
 
-        var darknessLevel = ((IEntityDataSaver) client.player).getPersistentData().getInt("darkness");
-
-        var darknessTick = LightChangeHandler.tick;
+        var darknessImmunity = ((IEntityDataSaver) client.player).getPersistentData().getInt("darknessImmunity"); //get immunity nbt data
         Identifier texture = EYE_CLOSED;
 
-        if (darknessTick < 20){
-            texture = EYE_CLOSED;
-        } else if (darknessTick >=20 && darknessTick < 40){
-            texture = getAnimatedTextureSlice(EYE_QUARTER_OPENED, darknessTick, 4);
-        } else if (darknessTick >=40 && darknessTick < 60){
-            texture = getAnimatedTextureSlice(EYE_HALF_OPENED,darknessTick,3);
-        } else if (darknessTick >=60 && darknessTick < 80){
-            texture = getAnimatedTextureSlice(EYE_THREE_QUARTERS_OPENED, darknessTick, 2);
-        } else if (darknessTick >=80 && darknessTick < 100){
-            texture = getAnimatedTextureSlice(EYE_OPENED, darknessTick, 1.5f);
-        } else if (darknessTick >=100){
-            texture = getAnimatedTextureSlice(EYE_EVIL, darknessTick, 1);
-        }
+        if (darknessImmunity <= 0){
+            texture = getAnimatedTextureSlice(EYE_EVIL, delveDarkness_eyeTick, 1.5f);
+        } else if (darknessImmunity < 20) texture = getAnimatedTextureSlice(EYE_OPENED, delveDarkness_eyeTick, 1.5f);
+        else if (darknessImmunity < 40){
+            texture = getAnimatedTextureSlice(EYE_THREE_QUARTERS_OPENED,delveDarkness_eyeTick,2);
+        } else if (darknessImmunity < 60){
+            texture = getAnimatedTextureSlice(EYE_HALF_OPENED, delveDarkness_eyeTick, 3);
+        } else if (darknessImmunity < 80)
+            texture = getAnimatedTextureSlice(EYE_QUARTER_OPENED, delveDarkness_eyeTick, 4f);
 
-        int yMod = client.player.experienceLevel > 0 ? 52 : 46; //does the player have a level number?
+        int yMod = client.player.experienceLevel > 0 ? 52 : 46; //If the player has levels (making the level number appear on hud) modify the y position of the eye, so it's above it
 
-        RenderSystem.setShaderTexture(0,texture);
-        DrawableHelper.drawTexture(matrixStack, x-9,y-yMod,0,0,18,18,18,18);
+        RenderSystem.setShaderTexture(0,texture); //render the eye using all that logic from before
+        DrawableHelper.drawTexture(matrixStack, x-9,y-yMod,0,0,18,18,18,18); //draw the eye at the correct position
     }
 
     public Identifier getAnimatedTextureSlice(Identifier[] frames, int tick, float frameSpeed)
     {
-        int modulo = (tick / (int)frameSpeed) % frames.length; //frame number
+        int modulo = (tick / (int)frameSpeed) % frames.length; //modulo is the current image number in the array, because it uses modulus the number can never be higher than the array bounds and allows for looping animation, for example 13 % 12 = 1, which would be the SECOND frame due to how arrays are numbered.
         return frames[modulo];
     }
 }
