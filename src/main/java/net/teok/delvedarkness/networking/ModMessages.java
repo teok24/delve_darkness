@@ -1,9 +1,11 @@
 package net.teok.delvedarkness.networking;
 
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;
 import net.teok.delvedarkness.DelveDarkness;
 import net.teok.delvedarkness.networking.packet.DarknessC2SPacket;
+import net.teok.delvedarkness.networking.packet.DarknessSyncDataS2CPacket;
 import net.teok.delvedarkness.networking.packet.LightnessC2SPacket;
 
 public class ModMessages {
@@ -16,6 +18,7 @@ public class ModMessages {
         ServerPlayNetworking.registerGlobalReceiver(LIGHTNESS_ID, LightnessC2SPacket::receive);
     }
     public static void registerS2CPackets(){
+        ClientPlayNetworking.registerGlobalReceiver(DARKNESS_SYNC_ID, DarknessSyncDataS2CPacket::receive);
 
     }
 

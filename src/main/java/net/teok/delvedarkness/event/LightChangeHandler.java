@@ -12,9 +12,8 @@ import net.teok.delvedarkness.networking.ModMessages;
 
 
 public class LightChangeHandler {
-    public static int monsterSpawnBlockLightLimit;
     public static int darkTick = 19; //should be 1 tick less than config doDamageInSeconds
-    public static int timeUntilDamage = 100; //5 seconds default time until damage starts ticking
+    public static int timeUntilDamage = 100; //5 seconds (100 ticks) default time until damage starts ticking
     public static int tick = 0;
 
     public static void registerLightChange()
@@ -25,7 +24,7 @@ public class LightChangeHandler {
                 //
                 PacketByteBuf packet = PacketByteBufs.create();
                 packet.writeInt(darkTick);
-                if (client.player.isCreative() || client.player.isSpectator()) return;
+                if (client.player.isCreative() || client.player.isSpectator() || client.isPaused()) return;
                 if (isDark(client.world, client.player.getBlockPos())) {
                     tick++;
                     if (tick >= timeUntilDamage)
@@ -38,8 +37,6 @@ public class LightChangeHandler {
                     darkTick = 19;
                     ClientPlayNetworking.send(ModMessages.LIGHTNESS_ID, packet);
                 }
-
-
             }
         });
     }
@@ -47,11 +44,7 @@ public class LightChangeHandler {
     {
         int light = isDay(world, pos);
         light += world.getLightLevel(LightType.BLOCK, pos);
-        if (light <= 1)
-        {
-            return true;
-        }
-        return false;
+        return light <= 2;//light level for darkness, should be controlled by config
     }
 
     public static int isDay(World world, BlockPos pos)
