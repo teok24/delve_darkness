@@ -8,6 +8,35 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.teok.delvedarkness.networking.ModMessages;
 
 public class DarknessData {
+    public static int addDarknessImmunity(IEntityDataSaver player, int amount)
+    {
+        NbtCompound nbt = player.getPersistentData();
+        int darknessImmunity = nbt.getInt("darknessImmunity");
+        if (darknessImmunity + amount >= 100){ //100 is 5 seconds
+            darknessImmunity = 100;
+            nbt.putInt("darknessImmunity", darknessImmunity);
+        }
+        else {
+            darknessImmunity += amount;
+            nbt.putInt("darknessImmunity", darknessImmunity);
+        }
+        return darknessImmunity;
+    }
+     public static int removeDarknessImmunity(IEntityDataSaver player, int amount)
+    {
+        NbtCompound nbt = player.getPersistentData();
+        int darknessImmunity = nbt.getInt("darknessImmunity");
+        if (darknessImmunity - amount <= 0){ //100 is 5 seconds
+            darknessImmunity = 0;
+            nbt.putInt("darknessImmunity", darknessImmunity);
+        }
+        else {
+            darknessImmunity -= amount;
+            nbt.putInt("darknessImmunity", darknessImmunity);
+        }
+        return darknessImmunity;
+    }
+
     public static int addDarkness(IEntityDataSaver player, int amount)
     {
         NbtCompound nbt = player.getPersistentData();
