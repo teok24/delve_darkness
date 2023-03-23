@@ -13,18 +13,13 @@ public class DarknessC2SPacket {
 
     public static void receive(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender)
     {
-        if (player.isDead())
-        {
-            DarknessData.resetDarkness(((IEntityDataSaver) player));
-            DarknessData.addDarknessImmunity(((IEntityDataSaver) player),1000);
-            return; //reset player
-        }
+
         var darknessTick = buf.readInt();
         if (darknessTick % 20 != 0) return; // %20 is 1 second, should be controlled by config
         DarknessData.addDarkness(((IEntityDataSaver) player),1);
         var darkness = ((IEntityDataSaver) player).getPersistentData().getInt("darkness");
         //player.sendMessage(Text.of("Darkness: " + darkness), true);
-        player.damage(DarknessDamageSource.DARKNESS, darkness * 0.5f); //0.5 should be a multiplier in config
+        player.damage(DarknessDamageSource.DARKNESS, 4); //2 should be a multiplier in config
 
     }
 }

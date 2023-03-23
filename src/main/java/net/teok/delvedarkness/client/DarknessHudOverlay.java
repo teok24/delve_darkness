@@ -112,14 +112,14 @@ public class DarknessHudOverlay implements HudRenderCallback {
         Identifier texture = EYE_CLOSED;
 
         if (darknessImmunity <= 0){
-            texture = getAnimatedTextureSlice(EYE_EVIL, delveDarkness_eyeTick, 1.5f);
-        } else if (darknessImmunity < 20) texture = getAnimatedTextureSlice(EYE_OPENED, delveDarkness_eyeTick, 1.5f);
+            texture = getAnimatedTextureSlice(EYE_EVIL, delveDarkness_eyeTick, 3);
+        } else if (darknessImmunity < 20) texture = getAnimatedTextureSlice(EYE_OPENED, delveDarkness_eyeTick, 4);
         else if (darknessImmunity < 40){
-            texture = getAnimatedTextureSlice(EYE_THREE_QUARTERS_OPENED,delveDarkness_eyeTick,2);
+            texture = getAnimatedTextureSlice(EYE_THREE_QUARTERS_OPENED,delveDarkness_eyeTick,5);
         } else if (darknessImmunity < 60){
-            texture = getAnimatedTextureSlice(EYE_HALF_OPENED, delveDarkness_eyeTick, 3);
+            texture = getAnimatedTextureSlice(EYE_HALF_OPENED, delveDarkness_eyeTick, 5);
         } else if (darknessImmunity < 80)
-            texture = getAnimatedTextureSlice(EYE_QUARTER_OPENED, delveDarkness_eyeTick, 4f);
+            texture = getAnimatedTextureSlice(EYE_QUARTER_OPENED, delveDarkness_eyeTick, 7);
 
         int yMod = client.player.experienceLevel > 0 ? 52 : 46; //If the player has levels (making the level number appear on hud) modify the y position of the eye, so it's above it
 
@@ -127,9 +127,9 @@ public class DarknessHudOverlay implements HudRenderCallback {
         DrawableHelper.drawTexture(matrixStack, x-9,y-yMod,0,0,18,18,18,18); //draw the eye at the correct position
     }
 
-    public Identifier getAnimatedTextureSlice(Identifier[] frames, int tick, float frameSpeed)
+    public Identifier getAnimatedTextureSlice(Identifier[] frames, int tick, int frameSpeed)
     {
-        int modulo = (tick / (int)frameSpeed) % frames.length; //modulo is the current image number in the array, because it uses modulus the number can never be higher than the array bounds and allows for looping animation, for example 13 % 12 = 1, which would be the SECOND frame due to how arrays are numbered.
+        int modulo = (tick / frameSpeed) % frames.length; //modulo is the current image number in the array, because it uses modulus the number can never be higher than the array bounds and allows for looping animation, for example 13 % 12 = 1, which would be the SECOND frame due to how arrays are numbered.
         return frames[modulo];
     }
 }
