@@ -6,6 +6,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.MusicSound;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.teok.delvedarkness.DelveDarkness;
 import net.teok.delvedarkness.util.IEntityDataSaver;
@@ -101,7 +103,7 @@ public class DarknessHudOverlay implements HudRenderCallback {
             x = width/2;
             y = height;
         }
-        if (client.player == null || client.player.isCreative() || client.player.isSpectator())
+        if (client.player == null || client.player.isCreative() || client.player.isSpectator() || client.options.hudHidden)
         {
             return; //if player doesn't exist or is in a mode with invulnerability, leave
         }
@@ -109,16 +111,19 @@ public class DarknessHudOverlay implements HudRenderCallback {
         RenderSystem.setShaderColor(1,1,1,1);
 
         var darknessImmunity = ((IEntityDataSaver) client.player).getPersistentData().getInt("darknessImmunity"); //get immunity nbt data
+        float darkPercentage = darknessImmunity/(float)(DelveDarkness.config.darknessImmunity()*20) * 100;
+
+        //client.player.sendMessage(Text.of("Percentage: " + darkPercentage), true); //checks if percentage is working correctly
         Identifier texture = EYE_CLOSED;
 
-        if (darknessImmunity <= 0){
+        if (darkPercentage <= 0){
             texture = getAnimatedTextureSlice(EYE_EVIL, delveDarkness_eyeTick, 3);
-        } else if (darknessImmunity < 20) texture = getAnimatedTextureSlice(EYE_OPENED, delveDarkness_eyeTick, 4);
-        else if (darknessImmunity < 40){
+        } else if (darkPercentage < 25) texture = getAnimatedTextureSlice(EYE_OPENED, delveDarkness_eyeTick, 4);
+        else if (darkPercentage < 50){
             texture = getAnimatedTextureSlice(EYE_THREE_QUARTERS_OPENED,delveDarkness_eyeTick,5);
-        } else if (darknessImmunity < 60){
-            texture = getAnimatedTextureSlice(EYE_HALF_OPENED, delveDarkness_eyeTick, 5);
-        } else if (darknessImmunity < 80)
+        } else if (darkPercentage < 75){
+            texture = getAnimatedTextureSlice(EYE_HALF_OPENED, delveDarkness_eyeTick, 6);
+        } else if (darkPercentage < 100)
             texture = getAnimatedTextureSlice(EYE_QUARTER_OPENED, delveDarkness_eyeTick, 7);
 
         int yMod = client.player.experienceLevel > 0 ? 52 : 46; //If the player has levels (making the level number appear on hud) modify the y position of the eye, so it's above it

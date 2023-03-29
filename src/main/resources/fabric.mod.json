@@ -3,11 +3,12 @@
   "id": "delvedarkness",
   "version": "${version}",
 
-  "name": "Darkness Take Me",
+  "name": "Delve Darkness",
   "description": "Darkness takes its toll. You now take damage after staying in darkness for too long.",
   "authors": [
     "Teok",
-    "cyancees"
+    "cyancees",
+    "Tikugra"
   ],
   "contact": {
     "sources": "https://github.com/teok24/delve_darkness"

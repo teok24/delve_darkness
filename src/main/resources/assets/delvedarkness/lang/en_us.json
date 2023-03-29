@@ -3,5 +3,39 @@
   "key.delvedarkness.get_light": "Get Light Key",
 
   "death.attack.delvedarkness_darkness": "%1$s was swallowed by darkness",
-  "death.attack.delvedarkness_darkness.player": "%1$s was swallowed by darkness with the help of %2$s"
+  "death.attack.delvedarkness_darkness.player": "%2$s shoved %1$s into the darkness",
+
+  "text.config.delvedarknessconfig.title": "Delve Darkness Config",
+  "text.config.delvedarknessconfig.category.flat": "Flat Darkness Damage Settings",
+  "text.config.delvedarknessconfig.category.levels": "Levels Settings",
+
+  "text.config.delvedarknessconfig.option.darknessImmunity": "Darkness Immunity",
+  "text.config.delvedarknessconfig.option.lightLevel": "Light Level",
+  "text.config.delvedarknessconfig.option.gracePeriod": "Grace Period",
+  "text.config.delvedarknessconfig.option.flat.darknessDamage": "Flat Darkness Damage",
+  "text.config.delvedarknessconfig.option.flat.darknessFlatDamage": "Flat Darkness Damage Toggle",
+  "text.config.delvedarknessconfig.section.darknessOptions": "Darkness Options",
+  "text.config.delvedarknessconfig.option.levels.minDarknessLevels": "Minimum Darkness Level",
+  "text.config.delvedarknessconfig.option.levels.maxDarknessLevels": "Maximum Darkness Level",
+  "text.config.delvedarknessconfig.option.levels.darknessMultiplier": "Darkness Damage Multiplier",
+  "text.config.delvedarknessconfig.option.darknessEffectModifier": "Skulk Darkness",
+  "text.config.delvedarknessconfig.option.darknessEffectModifier.tooltip": "Whether or not the skulk 'Darkness' effect modifies the darkness calculations.\nWhile the 'Darkness' effect is applied to you, your current light level requirement is raised by 8.",
+  "text.config.delvedarknessconfig.option.darknessSoundLevel": "Darkness Volume",
+  "text.config.delvedarknessconfig.option.darknessSoundLevel.tooltip": "Volume control for the darkness sound effect.",
+
+  "text.config.delvedarknessconfig.option.damageTypeSetting": "Damage Type",
+  "text.config.delvedarknessconfig.option.damageTypeSetting.value.flat": "Flat",
+  "text.config.delvedarknessconfig.option.damageTypeSetting.value.levels": "Levels",
+
+  "text.config.delvedarknessconfig.option.damageTypeSetting.tooltip": "How damage is dealt to the player.\nFlat settings will be disabled when Levels is in use and vice versa.",
+  "text.config.delvedarknessconfig.option.darknessImmunity.tooltip": "How long in seconds you can stay in darkness before damage starts.",
+  "text.config.delvedarknessconfig.option.lightLevel.tooltip": "At which light level do you start taking damage.",
+  "text.config.delvedarknessconfig.option.gracePeriod.tooltip": "After spawning, how many seconds of extra immunity you get.",
+  "text.config.delvedarknessconfig.option.flat.darknessDamage.tooltip": "The flat damage you take every second when you run out of darkness immunity.",
+  "text.config.delvedarknessconfig.option.levels.darknessMultiplier.tooltip": "Multiplies the damage you take by this number.",
+  "text.config.delvedarknessconfig.option.flat.darknessFlatDamage.tooltip": "Enables this section. When not in effect, darkness damage is based on the darkness levels config section.",
+  "text.config.delvedarknessconfig.option.levels.minDarknessLevels.tooltip" : "The minimum damage you can take from darkness",
+  "text.config.delvedarknessconfig.option.levels.maxDarknessLevels.tooltip" : "The maximum damage you can take from darkness",
+  "text.config.delvedarknessconfig.category.levels.tooltip" : "Settings for the levels damage type",
+  "text.config.delvedarknessconfig.category.flat.tooltip" : "Settings for the flat damage type"
 }
