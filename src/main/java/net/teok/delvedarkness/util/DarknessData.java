@@ -6,8 +6,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.teok.delvedarkness.DelveDarkness;
-import net.teok.delvedarkness.config.DelveDarknessConfig;
-import net.teok.delvedarkness.config.DelveDarknessConfigModel;
 import net.teok.delvedarkness.networking.ModMessages;
 
 public class DarknessData {
