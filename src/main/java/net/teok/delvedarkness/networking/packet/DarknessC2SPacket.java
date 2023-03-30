@@ -6,9 +6,9 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.teok.delvedarkness.DelveDarkness;
 import net.teok.delvedarkness.config.DelveDarknessConfigModel;
-import net.teok.delvedarkness.util.DarknessDamageSource;
 import net.teok.delvedarkness.util.DarknessData;
 import net.teok.delvedarkness.util.IEntityDataSaver;
+import net.teok.delvedarkness.util.ModDamageSources;
 
 
 public class DarknessC2SPacket {
@@ -21,9 +21,9 @@ public class DarknessC2SPacket {
         DarknessData.addDarkness(((IEntityDataSaver) player),1);
         if (DelveDarkness.config.damageTypeSetting() == DelveDarknessConfigModel.DamageTypeSetting.FLAT)
         {
-            player.damage(DarknessDamageSource.DARKNESS, DelveDarkness.config.flat.darknessDamage()); //if player is using flat damage, do this
+            player.damage(ModDamageSources.of(player.world, ModDamageSources.DARKNESS), DelveDarkness.config.flat.darknessDamage()); //if player is using flat damage, do this
         } else {
-            player.damage(DarknessDamageSource.DARKNESS, ((IEntityDataSaver) player).getPersistentData().getInt("darkness") * DelveDarkness.config.levels.darknessMultiplier()); //if player is using darkness stat for damage
+            player.damage(ModDamageSources.of(player.world, ModDamageSources.DARKNESS), ((IEntityDataSaver) player).getPersistentData().getInt("darkness") * DelveDarkness.config.levels.darknessMultiplier()); //if player is using darkness stat for damage
         }
 
 
